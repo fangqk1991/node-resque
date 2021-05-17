@@ -1,0 +1,56 @@
+{
+  "name": "@fangcha/resque",
+  "version": "1.1.0",
+  "description": "Node resque.",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "test": "nyc mocha --require ts-node/register tests/**/*.test.ts --timeout 1000000 --exit",
+    "lint": "eslint . --fix --cache",
+    "build": "rm -rf ./lib/ && tsc"
+  },
+  "repository": "https://github.com/fangqk1991/node-resque.git",
+  "keywords": [
+    "resque"
+  ],
+  "author": "fang <me@fangqk.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/assert": "^1.5.4",
+    "@types/mocha": "^8.2.2",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.3.0",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4",
+    "@types/ioredis": "^4.14.8",
+    "@types/request-promise": "^4.1.44",
+    "@types/sequelize": "^4.28.3",
+    "@types/shelljs": "^0.8.8"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "jsxSingleQuote": true,
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "dependencies": {
+    "ioredis": "^4.16.0",
+    "moment": "^2.24.0",
+    "shelljs": "^0.8.4"
+  }
+}
