@@ -1,5 +1,6 @@
 import { Resque } from './Resque'
 import { TaskCenter } from '../job/TaskCenter'
+import { ResqueQueue } from './ResqueQueue'
 
 const uuid = require('uuid/v4')
 
@@ -58,6 +59,29 @@ export class ResqueJob {
     if (typeof args !== 'object') {
       throw new Error('Supplied $args must be an object.')
     }
+    return new ResqueJob(queue, {
+      class: className,
+      args: args,
+      id: uuid().replace(/-/g, ''),
+      queue_time: Date.now(),
+    })
+  }
+
+  public static async generateWithoutRepeatedJobInQueue(
+    queue: string,
+    className: string,
+    args: Record<string, unknown> = {}
+  ) {
+    if (typeof args !== 'object') {
+      throw new Error('Supplied $args must be an object.')
+    }
+
+    const jobs = await ResqueQueue.getJobsInQueue(queue)
+    const hasRepeatedJob = jobs.find((job) => job.payload.class === className)
+    if (hasRepeatedJob) {
+      return null
+    }
+
     return new ResqueJob(queue, {
       class: className,
       args: args,
