@@ -6,7 +6,7 @@ const uuid = require('uuid/v4')
 interface JobPayload {
   id: string
   class: string
-  args?: {}
+  args?: Record<string, unknown>
   queue_time?: number
 }
 
@@ -54,7 +54,7 @@ export class ResqueJob {
     await Resque.redis().rpush(`resque:queue:${queue}`, data)
   }
 
-  public static generate(queue: string, className: string, args: {} = {}) {
+  public static generate(queue: string, className: string, args: Record<string, unknown> = {}) {
     if (typeof args !== 'object') {
       throw new Error('Supplied $args must be an object.')
     }
@@ -72,7 +72,7 @@ export class ResqueJob {
    * @param className
    * @param args
    */
-  public static async create(queue: string, className: string, args: {}) {
+  public static async create(queue: string, className: string, args: Record<string, unknown> = {}) {
     const job = ResqueJob.generate(queue, className, args)
     await job.addToQueue()
     return job

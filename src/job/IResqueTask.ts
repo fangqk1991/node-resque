@@ -1,3 +1,3 @@
 export interface IResqueTask {
-  perform(params: {}): Promise<void>
+  perform(params: Record<string, unknown>): Promise<void>
 }
