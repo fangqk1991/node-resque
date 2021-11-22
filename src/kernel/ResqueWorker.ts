@@ -80,9 +80,10 @@ export class ResqueWorker {
 
         await ResqueStat.incr(`processed`)
         await ResqueStat.incr(`processed:${this.getID()}`)
-        await Resque.redis().del(this.redisKey_workerInfo())
       } catch (e) {
         await this.onJobFailed(job, e)
+      } finally {
+        await Resque.redis().del(this.redisKey_workerInfo())
       }
       this._isBusy = false
     }
