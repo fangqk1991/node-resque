@@ -41,15 +41,20 @@ class _Resque {
     if (this._redis) {
       return this._redis
     }
-
-    const redis = new IORedis({
-      host: this._redisConfig.redisHost,
-      port: this._redisConfig.redisPort,
-    })
+    this._redis = this._redisConfig.useCluster
+      ? (new IORedis.Cluster([
+          {
+            host: this._redisConfig.redisHost,
+            port: this._redisConfig.redisPort,
+          },
+        ]) as any)
+      : new IORedis({
+          host: this._redisConfig.redisHost,
+          port: this._redisConfig.redisPort,
+        })
     // TODO: Read-Timeout if need
     // $redis->setOption(Redis::OPT_READ_TIMEOUT, -1);
-    this._redis = redis
-    return redis
+    return this._redis
   }
 
   public broadcast() {
@@ -58,10 +63,17 @@ class _Resque {
 
   public specifiedRedis(uid: string) {
     if (!this._redisMap[uid]) {
-      this._redisMap[uid] = new IORedis({
-        host: this._redisConfig.redisHost,
-        port: this._redisConfig.redisPort,
-      })
+      this._redisMap[uid] = this._redisConfig.useCluster
+        ? (new IORedis.Cluster([
+            {
+              host: this._redisConfig.redisHost,
+              port: this._redisConfig.redisPort,
+            },
+          ]) as any)
+        : new IORedis({
+            host: this._redisConfig.redisHost,
+            port: this._redisConfig.redisPort,
+          })
     }
     return this._redisMap[uid]
   }
