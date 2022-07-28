@@ -58,4 +58,13 @@ export class ResqueTrigger implements IResqueObserver {
       }
     }
   }
+
+  public async onRedisConnectionError(error: Error) {
+    log(`onRedisConnectionError: ${error}`)
+    for (const observer of Resque.observers()) {
+      if (observer.onRedisConnectionError) {
+        await observer.onRedisConnectionError(error)
+      }
+    }
+  }
 }

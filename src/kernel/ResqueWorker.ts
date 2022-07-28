@@ -55,7 +55,10 @@ export class ResqueWorker {
     await this.registerWorker()
 
     while (!this._willStop) {
-      const job = await this.waitJob()
+      const job = await this.waitJob().catch(async (err) => {
+        console.error(err)
+        await Resque.broadcast().onRedisConnectionError(err)
+      })
       if (!(job instanceof ResqueJob)) {
         continue
       }
@@ -114,6 +117,7 @@ export class ResqueWorker {
     const queues = await this.queues()
     const list = queues.map((queue: string) => `resque:queue:${queue}`)
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const arr = (await Resque.specifiedRedis(this.getID()).blpop(...list, 0)) as string[]
     if (arr.length === 0) {

@@ -9,4 +9,6 @@ export interface IResqueObserver {
   onJobDone(job: ResqueJob): void | Promise<void>
   onJobFailed(job: ResqueJob, e: Error): void | Promise<void>
   onTerminalProgressUpdated?(message: string): void | Promise<void>
+
+  onRedisConnectionError?(error: Error): void | Promise<void>
 }
